@@ -1,0 +1,13 @@
+# Ignorar ambiente virtual Python e caches
+venv/
+__pycache__/
+*.pyc
+
+# Ignorar banco de dados local
+*.db
+*.sqlite3
+
+# Ignorar dependências do Node.js (Front-end)
+node_modules/
+dist/
+.env
