@@ -9,3 +9,8 @@ class Cachorro(Base):
     raca = Column(String)
     idade = Column(Integer)
     nome_dono = Column(String)
+    
+    # NOVOS CAMPOS DO LAUDO
+    problema = Column(String)
+    tratamento = Column(String)
+    data_entrada = Column(String)
