@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from database import engine, Base, SessionLocal
 import models
 import schemas
+from fastapi import FastAPI, Depends, HTTPException
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -47,3 +49,17 @@ def criar_cachorro(cachorro: schemas.CachorroCreate, db: Session = Depends(get_d
 def listar_cachorros(db: Session = Depends(get_db)):
     cachorros = db.query(models.Cachorro).all()
     return cachorros
+
+@app.delete("/cachorros/{cachorro_id}")
+def dar_alta_paciente(cachorro_id: int, db: Session = Depends(get_db)):
+    # Busca o cachorro pelo ID
+    cachorro = db.query(models.Cachorro).filter(models.Cachorro.id == cachorro_id).first()
+    
+    if not cachorro:
+        raise HTTPException(status_code=404, detail="Paciente não encontrado")
+    
+    # Deleta do banco de dados e salva a alteração
+    db.delete(cachorro)
+    db.commit()
+    
+    return {"mensagem": "Alta do paciente realizada com sucesso!"}

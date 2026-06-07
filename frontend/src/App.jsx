@@ -17,6 +17,20 @@ function App() {
     setCachorros(dados)
   }
 
+  const darAlta = async (id) => {
+    if (window.confirm("Tem certeza que deseja dar alta para este paciente?")) {
+      try {
+        await fetch(`http://127.0.0.1:8000/cachorros/${id}`, {
+          method: 'DELETE',
+        });
+        // Atualiza a lista na tela automaticamente após deletar
+        carregarCachorros(); 
+      } catch (error) {
+        console.error("Erro ao dar alta no paciente:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     carregarCachorros()
   }, [])
@@ -84,9 +98,19 @@ function App() {
       {/* Lista de Pacientes (Agora mapeando a lista filtrada) */}
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {cachorrosFiltrados.map((dog) => (
-          <li key={dog.id} style={{ marginBottom: '10px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
-            <strong style={{ fontSize: '18px', color: '#2980b9' }}>{dog.nome}</strong> ({dog.raca}) - {dog.idade} anos <br/>
-            <small>Dono(a): {dog.nome_dono}</small>
+          <li key={dog.id} style={{ marginBottom: '10px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <strong style={{ fontSize: '18px', color: '#2980b9' }}>{dog.nome}</strong> ({dog.raca}) - {dog.idade} anos <br/>
+              <small>Dono(a): {dog.nome_dono}</small>
+            </div>
+            
+            {/* BOTÃO DE DAR ALTA ADICIONADO AQUI */}
+            <button 
+              onClick={() => darAlta(dog.id)} 
+              style={{ backgroundColor: '#e74c3c', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              Dar Alta
+            </button>
           </li>
         ))}
 
